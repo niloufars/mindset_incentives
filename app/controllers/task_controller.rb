@@ -16,7 +16,7 @@ class TaskController < ApplicationController
   end
   def getnexttask
     # move stuff in dashboard here, redirect to dashboard if task stage = 0
-    my_tasks = Task.where(workerID: curr_worker_id)
+    my_tasks = Task.where(workerID: curr_worker_id).order(:id)
     @curr_task = nil
 
     if my_tasks.length == 0 # if this is the first task
