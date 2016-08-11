@@ -1,0 +1,91 @@
+<p>Worker ID: <%= curr_worker_id %> (<%= link_to "not you? click here", getid_path %>)</p>
+<p>Task <%= @curr_task.tasktype.to_s %>/6</p>
+<div id = "status" style="font-size: 300%">
+</div>
+<% if @curr_task.tasktype == 2 %>
+	<p>Write a one paragraph summary of the audio clip <b>in your own words</b>. What is the main message?</p>
+<% elsif @curr_task.tasktype == 6 %>
+	<p>Write a one paragraph summary of the audio clip <b>in your own words</b>. What is the main message?</p>
+<% else %>
+	<p>Transcribe the following audio clip in the text box, <b>pay close attention to your time limit above</b><br> you need to get at least 70% of the transcription right to receive the bonus.</p>
+<% end %>
+
+<audio controls>
+	<% if @curr_task.tasktype == 2 %>
+		<source src= <%= "https://stanford.edu/~niloufar/audio/p1"+@curr_task.condition.to_s+@curr_task.tasktype.to_s+".mp3" %> type="audio/mpeg">
+
+	<% else %>
+		<source src= <%= "https://stanford.edu/~niloufar/audio/p1t"+@curr_task.tasktype.to_s+".mp3" %> type="audio/mpeg">		
+	<% end %>
+	</audio>
+
+	<%= form_tag("/posttask",:id => 'myform', method: "post") do %>
+
+
+	<%= text_area_tag 'text_data', @curr_task.text, :cols => 80, :rows => 20 %>
+	<%= hidden_field_tag :taskid, @curr_task.id %>
+	<br>
+	<%= submit_tag('Submit', class: "btn", style: "background-color: #4CAF50; /* Green */
+		border: none;
+		color: white;
+		padding: 15px 32px;
+		text-align: center;
+		text-decoration: none;
+		display: inline-block;
+		font-size: 16px;") %>
+		
+		<% end %>
+
+		<script type="text/javascript">
+			t = 0;
+			$( document ).ready(function(){
+				//auto_save_text();
+				if ( '<%= @curr_task.tasktype %>' == 2 || '<%= @curr_task.tasktype %>' == 6){
+					$("#text_data").val("summary:");
+				//	set_text('<%= @curr_task.condition %>');
+				}
+				t = parseInt('<%= @curr_task.started_at+@curr_task.timelimit-Time.now%>');
+				setInterval(auto_save_text, 5000);
+				setInterval(run_timer, 1000);
+			});
+			function run_timer(){
+				if ( t>0 ){
+					t--;
+					if ((t%60)<10)
+						$("#status").text(Math.floor(t/60)+":0"+(t%60));
+					else
+						$("#status").text(Math.floor(t/60)+":"+(t%60));
+				}else{
+					//$("#text_data")
+					//alert(t);
+					t--;
+					if ( t<7 ){
+						$('#myform').submit();
+					}
+
+				}
+			}
+			function auto_save_text(){
+			//alert('<%= @curr_task.id %>');
+			//alert(document.getElementById('text_data').value);
+			$.ajax({
+				url: "/auto_save_text",
+				type: "POST",
+				data: {"id": '<%= @curr_task.id %>', "text_data": document.getElementById('text_data').value},
+				success: function(resp){
+				},
+				error: function(xhr, status, error){
+					//alert(xhr.responseText);
+					//alert(status);
+					//alert(error);
+
+				}
+			});
+			}
+			function set_text(cond){
+				if ( cond == 'c' )
+					$("#text_data").val("The Specialties of the Brain Revealed \nNew Research Shows That Different Areas of the Brain Have Different Specialties \nThe human brain has done some important things. Brains have designed big buildings. They’ve created beautiful music throughout the world, and they’ve written books and texts throughout recorded history. As humans, we have an important tool between our ears, but most of us don’t know much about how it works. Many people think the brain is a mystery. They don’t know much about what it’s made of, how it works, or what its different parts do. Research shows that the brain has many different parts or areas.The brain is broken up into three main parts: the hindbrain, the midbrain, and the forebrain. \nThe forebrain – the largest part of the brain – is broken up into four different lobes or parts. These different parts do very different things from each other. the lobes are called the frontal lobe, the temporal lobe, the parietal lobe, and the occipital lobe. Take a look at the picture below to see the four lobes. Each lobe is broken up do different tasks. Humans’ brains are bigger than the brains of almost all other animals. Some animals do have bigger brains. But those animals also weigh a lot more. So compared to their total body weight, their brain is smaller. Interestingly, when you look at how big brains are as a part of total body weight, humans have bigger brains than most other animals. Even though their brains are smaller, the brains of other mammals have the same four lobes of the forebrain as we do. And they are arranged in the same general way. \nWhat do the different lobes do? The occipital lobe is the one on the left side of the picture on the previous page. It is in the very back of your head. Its main job is vision. That’s where the brain understands the things you see. When information comes from our eyes to our brain, it’s not organized very well. What our eyes see is actually very blurry. When we look at something, we can only see it clearly because the occipital lobe is amazingly good at making sense of the information our eyes send to it. The information coming in from our eyes is so confusing that there are special areas in the occipital lobe that specialize in detecting horizontal lines and other areas that specialize in detecting vertical lines. Once those areas figure out where the lines are and how they are shaped, they pass that information onto the next areas. These later areas figure out the full shape of whatever you’re looking at and where it is compared to other things you can see. The visual areas in the occipital lobe are like the best computer software for editing photographs. \nThe parietal lobe is where the brain interprets the sense of touch. When we touch a feather, an electrical current—like that in a battery, it is sent from our finger up through our spinal cord and into our parietal lobe. This is where the brain translates this touch sensation and identifies the object we touched as soft. In the same way, it helps us understand temperature and pain. Think about how dangerous it would be if you couldn’t feel pain—you could injure yourself without realizing it! The temporal lobe is responsible for hearing and for producing language. When a person calls you, your ear catches the sound, which is then converted into an electrical signal. That signal is then passed to the temporal lobe. When you talk with your friends, the temporal lobe is what allows you to understand what they are saying. It also helps you think of the right words to refer to different things. People with injured temporal lobes can’t speak properly because they can’t find the right word for what they’re trying to say.Some of the areas in and around the temporal lobe learn new information and store it for later use. When students remember how to get around their school or what one of their friends looks like, it’s because their temporal lobe and the areas around it store that information. Finally, the frontal lobe is the brain’s mastermind. It’s in the very front of our head, and it’s involved in making plans, making decisions, dealing with our emotions. Whenever people make a long-term plan or decide what they’re going to do, they’re doing it with the frontal lobe. \nSo now you know that different lobes are specialized for different tasks and that their parts are broken up into areas that have specific functions. But how do they talk to each other? And what are they made of? How does the brain work? The brain is made up of 100 billion tiny cells called neurons. These cells are special because they can communicate with one another very quickly using a combination of electricity and chemicals. Take a look at the picture below. Each neuron has a cell body, or soma. It also has little arms called dendrites coming off to the sides. The dendrites receive information from other neurons. Last but not least, most neurons also have an axon that they use to send messages to other neurons. Through its dendrites and axon, each neuron is connected to many other neurons in a network. These networks are connected to each other in an even bigger network— kind of like computers connected to each other on the Internet. How does the brain send messages? When one neuron wants to send a message to another neuron, it sends a message down its axon using an electrical signal called an action potential. Once the signal gets to the edge where the two neurons meet—where the axon of the first neuron touches the dendrite of the second neuron— the axon releases chemicals called neurotransmitters.");
+				else if (cond == 'g' )
+					$("#text_data").val('You Can Grow Your Intelligence \nNew Research Shows the Brain Can Be Developed Like a Muscle \nMany people think of the brain as a mystery. They don’t know much about intelligence and how it works. When they do think about what intelligence is, many people believe that a person is born either smart, average, or dumb—and stays that way for life. But new research shows that the brain is more like a muscle. And scientists have been able to show just how the brain grows and gets stronger when you learn. Everyone knows that when you lift weights, your muscles get bigger and you get stronger. A person who can’t lift 20 pounds when they start exercising can 100 pounds after working out for a long time. That’s because the muscles become larger and stronger with exercise. And when you stop exercising, the muscles shrink and you get weaker. That’s why people say “Use it or lose it!” But most don’t know that when they practice and learn new things,. Inside the cortex of the brain are billions of tiny nerve cells, called neurons. The nerve cells have branches connecting them to other cells in a complicated network. The more that you challenge your mind to learn, the more your brain cells grow. Then, things that you once found very hard or even impossible to do—like speaking a foreign language or doing algebra—seem to become easy. The result is a stronger, smarter brain. \nHow Do We Know the Brain Can Grow Stronger? \nScientists started thinking that the human brain could develop and change when they studied. They found out that animals who lived in a challenging environment, with other animals and toys to play with, were different from animals who lived alone in bare cages. While the animals who lived alone just ate and slept all the time, the ones who lived with different toys and other animals were always active. They spent a lot of time figuring out how to use the toys and get along with the other animals. their whole brains were about 10% heavier than the brains of the animals who lived alone without toys. The animals who were exercising their brains by playing with toys and each other were also “smarter”. Even old animals got smarter and developed more connections in their brains when they got the chance to play with new toys and other animals. \nChildren’s Brain Growth. \nAnother thing that got scientists thinking about the brain growing and changing was babies. Everyone knows that babies are born without being able to talk or understand language. But somehow, almost all babies learn to speak their parents’ language in the first few years of life. How do they do this? they are born, babies are hearing people around them talk — all day, every day, to the baby and to each other. They have to try to make sense of these strange sounds and figure out what they mean. In a way, babies are. Later, when they need to tell their parents what they want, they start practicing talking themselves. At first, they just make goo-goo sounds. Then, words start coming. And by the time they are three years old, most can say whole sentences almost perfectly. Once children learn a language, they don’t forget it. The babys’ brain cells get larger and grow new connections between them. These new, stronger connections make the child’s brain stronger and smarter, just like a weightlifter’s big muscles make them strong. \nThe Real Truth About “Smart” and “Dumb” \nNo one thinks babies are stupid because they can’t talk. They just haven’t learned how to yet. But some people will call a person dumb if they can’t solve math problems, or spell a word right, or read fast — even though all these things are learned with practice. At first, no one can read or solve equations. But with practice, they can learn to do it. And the more a person learns, the easier it gets to learn new things—because their brain “muscles” have gotten stronger! The students everyone thinks as the “smartest” may not have been born any different from anyone else. But before they started school, they may have started to practice reading. They had already started to build up their “reading muscles.” Then, in the classroom, everyone said, “That’s the smartest student in the class.” They don’t realize that any of the other students could learn to do as well all of those other students learned to speak at least one whole language already—something that grown ups find very hard to do. They just need to build up their “reading muscles” too. What Can You Do to Get Smarter? Just like a weightlifter or a basketball player, to be a brain athlete, you have to exercise and practice. By practicing, you make your brain stronger. You also learn skills that let you use your brain in a smarter way—just like a basketball player learns new moves. But many just like becoming stronger physically or becoming a better ball player does. Sometimes it even hurts! But when you feel yourself get better and stronger, all the work is worth it!');
+			}
+		</script>

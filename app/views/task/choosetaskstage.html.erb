@@ -1,0 +1,88 @@
+<p><%= curr_worker_id %> (<%= link_to "not you?", getid_path %>) -- Task <%= @curr_task.tasktype.to_s %>/6</p>
+<h2>Choose your next task:</h2>
+
+
+<p>
+	Transcribe a <span style="font-weight: bold;">one minute</span> audio file within the time allotted. <br><br>If you get more that <span style="font-weight: bold;">70% of the audio</span> transcribed correctly you will receive the bonus and the next difficulty level will unlock.
+</p>
+
+
+<%= form_tag("/submitchoice", method: "post") do %>
+
+<table id="tableSelect" class="rowclick" border=1>
+<tbody>
+    <tr>
+        <td>
+            <input name="level" id="stage_1" type="radio" value="1" required>
+            <div class="option ">
+            <div class="numberCircle">A</div>
+            <span class="glyphicon glyphicon-time" aria-hidden="true"></span> limit: 10 minutes <br><br></div>
+        </td>
+    
+        <td>                          
+            <input name="level" id="stage_2" type="radio" value="2" required>
+            <div class="option ">
+            <div class="numberCircle">B</div>
+            <span class="glyphicon glyphicon-time" aria-hidden="true"></span> limit: 7 minutes<br>
+            bonus: 50c
+
+            </div>
+        </td>        
+    
+        <td>                          
+            <input name="level" id="stage_3" type="radio" value="3"  disabled>  
+            <div class="option ">
+            <div class="numberCircle">C</div>
+
+            <span class="glyphicon glyphicon-time" aria-hidden="true"></span> limit: 5 minutes<br>
+            bonus: $1</div>                  
+        </td>
+
+        <td>                          
+            <input name="level" id="stage_4" type="radio" value="4"  disabled>  
+            <div class="option ">
+            <div class="numberCircle">D</div>
+            <span class="glyphicon glyphicon-time" aria-hidden="true"></span> limit: 3 minutes<br>
+            bonus: $1.5</div>                  
+        </td>
+
+        <td>                          
+            <input name="level" id="stage_5" type="radio" value="5"  disabled>  
+            <div class="option ">
+            <div class="numberCircle">E</div>
+            summarize audio<br>
+            bonus: $2
+            </div>                  
+        </td>
+        
+    </tr>
+</tbody>
+</table>
+
+<br>
+<%= hidden_field_tag :taskid, @curr_task.id %>
+<%= submit_tag('Start', class: "btn", style: "background-color: #4CAF50; /* Green */
+	border: none;
+	color: white;
+	padding: 15px 32px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;") %>
+
+<% end %>
+
+<script>
+$( document ).ready(function(){
+    for (i=1 ; i<='<%= @curr_task.stagelimit %>' ; i++ ){
+        $("#stage_"+i).prop('disabled', false);
+        $("#stage_"+i).prop('required', true);
+    }
+    
+});
+$('#tableSelect td').click(function() {
+    if ( $(this).find('input:radio').is(':enabled') ){
+        $(this).find(' input:radio').prop('checked', true);
+    }
+})
+</script>

@@ -1,0 +1,14 @@
+<h2>Welcome!</h2>
+
+<p>Hi, <%= curr_worker_id %> (not you? <%= link_to "click here", getid_path %>),</p>
+<p>
+We will give you a series of 6 transcription tasks. <br>Overall this HIT should take 1-1.5 hours to complete, you can take breaks between tasks. <br>You will also have opportunities to receive bonuses on some of the tasks.
+
+
+</p>
+
+<p>
+When you click Start below your first task will have a <b>10 minute time limit</b>.
+</p>
+
+<%= button_to "Start", {:controller => "task", :action => "getnexttask"}, :method => "get", :class => "button"%>

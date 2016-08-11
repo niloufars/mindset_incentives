@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  workerID: MyString
+  condition: MyString
+  tasktype: 1
+  taskstage: 1
+  timelimit: 1
+  started_at: 2016-06-30 10:55:59
+  finished_at: 2016-06-30 10:55:59
+  state: MyString
+  text: MyText
+  keystrokes: 1
+
+two:
+  workerID: MyString
+  condition: MyString
+  tasktype: 1
+  taskstage: 1
+  timelimit: 1
+  started_at: 2016-06-30 10:55:59
+  finished_at: 2016-06-30 10:55:59
+  state: MyString
+  text: MyText
+  keystrokes: 1

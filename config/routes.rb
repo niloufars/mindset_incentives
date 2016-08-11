@@ -1,4 +1,18 @@
 Rails.application.routes.draw do
+  get 'task/new'
+
+  get 'sessions/new'
+  root 'task#start'
+  get    'start'   => 'task#start'
+  get    'getid'   => 'sessions#new'
+  post   'getid'   => 'sessions#create'
+  get 'dashboard' => 'task#dashboard'
+  post 'posttask' => 'task#posttask'
+  get 'getnexttask' => 'task#getnexttask'
+  get 'finished' => 'task#finished'
+  post 'submitchoice' => 'task#submitchoice'
+  post 'auto_save_text' => 'task#auto_save_text'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

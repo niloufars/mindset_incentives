@@ -1,0 +1,77 @@
+@import "bootstrap-sprockets";
+@import "bootstrap";
+
+.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+
+
+table {
+    border-collapse: collapse;
+
+}
+.option{
+	padding: 10px;
+	border: 1px solid black;
+  //height: 120px;
+}
+
+td {
+    border: 1px solid white;
+    padding: 10px;   
+}
+
+
+//input, radio {display:none;}
+
+input:checked + .option {
+  background-color: #e5e5e5;
+}
+input:disabled + .option {
+  color: #A9A9A9;
+  border: 1px solid #A9A9A9;
+  .numberCircle {
+    color: #A9A9A9;
+    border: 2px solid #A9A9A9;
+    }
+
+}
+
+input:enabled + .option {
+  border: 5px solid #33CC66;
+}
+
+input:enabled + .option:hover {
+  background-color: #e5e5e5;
+  cursor:pointer;
+}
+
+input:disabled + .option:hover {
+  cursor:not-allowed;
+}
+
+.numberCircle {
+    border-radius: 50%;
+    behavior: url(PIE.htc); /* remove if you don't care about IE8 */
+
+    width: 40px;
+    height: 40px;
+    padding: 8px;
+    margin-bottom: 10px;
+    margin-left: auto;
+    margin-right: auto;
+
+    background: #fff;
+    border: 2px solid #666;
+    color: #666;
+    text-align: center;
+
+    font: 18px Arial, sans-serif;
+}
