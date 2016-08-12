@@ -142,7 +142,7 @@ class TaskController < ApplicationController
 
   end
   def index
-    @tasks = Task.all
+    @tasks = Task.all.order(:id)
   end
   def evaluate(text, task_type, task_stage)
     correct_text = ''
