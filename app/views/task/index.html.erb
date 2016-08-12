@@ -1,0 +1,7 @@
+<ul>
+	<% @tasks.each do |task| %>
+	<li>
+		<%= task.id %>) <%= task.workerID %> | <%= task.condition %> | task: <%= task.tasktype %> | stage: <%= task.taskstage %> | <%= task.accuracy %>% | $<%= task.bonus %>
+	</li>
+	<% end %>
+</ul>

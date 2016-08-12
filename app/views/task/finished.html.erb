@@ -1,2 +1,7 @@
+<% if @bonus != nil && @bonus > 0  %>
+bonus: $<%= @bonus.to_f/100 %><br>
+<% end %>
+
 You have completed all tasks thank you. Your completion code is: <%= @complete_code %>
-We will send your bonuses shortly.
+
+

@@ -1,11 +1,17 @@
-<p><%= curr_worker_id %> (<%= link_to "not you?", getid_path %>) -- Task <%= @curr_task.tasktype.to_s %>/6</p>
-<h2>Choose your next task:</h2>
+<p><%= curr_worker_id %> (<%= link_to "not you?", getid_path %>)  
+<% if @curr_task.bonus != nil && @curr_task.bonus > 0  %>
+-- bonus: $<%= @curr_task.bonus.to_f/100 %>
+<% end %></p>
+<h2> Choose your level of difficulty for task <%= @curr_task.tasktype.to_s %>/6:</h2>
 
-
+<p>You can choose to stay at the basic level of difficulty or take on more challenging tasks. </p>
 <p>
-	Transcribe a <span style="font-weight: bold;">one minute</span> audio file within the time allotted. <br><br>If you get more that <span style="font-weight: bold;">70% of the audio</span> transcribed correctly you will receive the bonus and the next difficulty level will unlock.
+	Transcribe a <span style="font-weight: bold;">one minute</span> audio file within the time allotted. <br>
+    <% if @curr_task.condition[1] == 'p' %>
+    If you get more that <span style="font-weight: bold;">70% of the audio</span> transcribed correctly you will receive the bonus. 
+    <% end %>
 </p>
-
+<p>After you complete a task the next difficulty level will unlock.</p>
 
 <%= form_tag("/submitchoice", method: "post") do %>
 
@@ -16,7 +22,12 @@
             <input name="level" id="stage_1" type="radio" value="1" required>
             <div class="option ">
             <div class="numberCircle">A</div>
-            <span class="glyphicon glyphicon-time" aria-hidden="true"></span> limit: 10 minutes <br><br></div>
+            <span class="glyphicon glyphicon-time" aria-hidden="true"></span> limit: 10 minutes 
+            <% if @curr_task.condition[1] == 'p' %>
+            <br><br>
+            <% end %>
+
+            </div>
         </td>
     
         <td>                          
@@ -24,7 +35,9 @@
             <div class="option ">
             <div class="numberCircle">B</div>
             <span class="glyphicon glyphicon-time" aria-hidden="true"></span> limit: 7 minutes<br>
+            <% if @curr_task.condition[1] == 'p' %>
             bonus: 50c
+            <% end %>
 
             </div>
         </td>        
@@ -35,7 +48,10 @@
             <div class="numberCircle">C</div>
 
             <span class="glyphicon glyphicon-time" aria-hidden="true"></span> limit: 5 minutes<br>
-            bonus: $1</div>                  
+            <% if @curr_task.condition[1] == 'p' %>
+            bonus: $1
+            <% end %>
+            </div>                  
         </td>
 
         <td>                          
@@ -43,7 +59,10 @@
             <div class="option ">
             <div class="numberCircle">D</div>
             <span class="glyphicon glyphicon-time" aria-hidden="true"></span> limit: 3 minutes<br>
-            bonus: $1.5</div>                  
+            <% if @curr_task.condition[1] == 'p' %>
+            bonus: $1.5
+            <% end %>
+            </div>                  
         </td>
 
         <td>                          
@@ -51,7 +70,9 @@
             <div class="option ">
             <div class="numberCircle">E</div>
             summarize audio<br>
-            bonus: $2
+            <% if @curr_task.condition[1] == 'p' %>
+                bonus: $2
+            <% end %>
             </div>                  
         </td>
         

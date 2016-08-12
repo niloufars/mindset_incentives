@@ -12,6 +12,7 @@ class TaskController < ApplicationController
   	@audioID = @curr_task.tasktype
   end
   def finished
+    @bonus = params[:b].to_i
     @complete_code = (0...8).map { (65 + rand(26)).chr }.join
   end
   def getnexttask
@@ -21,15 +22,20 @@ class TaskController < ApplicationController
 
     if my_tasks.length == 0 # if this is the first task
       cond = nil
-      if rand(0..1) == 0 
-        cond = "c"
-      else
-        cond = "g"
+      coin = rand(0..3)
+      if coin == 0 
+        cond = "cp"
+      elsif coin == 1
+        cond = "cn"
+      elsif coin == 2
+        cond = "gp"
+      elsif coin == 3
+        cond = "gn"
       end
-      @curr_task = Task.create(workerID: curr_worker_id, condition: cond, tasktype: 1, taskstage: 0, stagelimit: 2, state: "active", timelimit: (10*60))
+      @curr_task = Task.create(workerID: curr_worker_id, condition: cond, tasktype: 1, taskstage: 0, stagelimit: 2, state: "active", timelimit: (10*60), bonus: 0)
       redirect_to controller: 'task', action: 'dashboard', taskid: @curr_task.id
     elsif my_tasks.length == 6 && my_tasks[-1].state == "finished"# if the last task is complete
-      redirect_to controller: 'task', action: 'finished'
+      redirect_to controller: 'task', action: 'finished', b: my_tasks[-1].bonus
     else
       latest_task = my_tasks[-1]
       if latest_task.state == "active"
@@ -43,7 +49,7 @@ class TaskController < ApplicationController
           redirect_to controller: 'task', action: 'dashboard', taskid: @curr_task.id
         end
       else #latest_task.state == "finished" || latest_task.state == "expired"
-        @curr_task = Task.create(workerID: curr_worker_id, condition: latest_task.condition, tasktype: latest_task.tasktype+1, taskstage: nil, stagelimit: latest_task.stagelimit, state: "waiting") 
+        @curr_task = Task.create(workerID: curr_worker_id, condition: latest_task.condition, tasktype: latest_task.tasktype+1, taskstage: nil, stagelimit: latest_task.stagelimit, state: "waiting", bonus: latest_task.bonus) 
         if @curr_task.tasktype == 2
           @curr_task.taskstage = 0
           @curr_task.timelimit = 15*60
@@ -65,8 +71,38 @@ class TaskController < ApplicationController
 
   end
   def posttask
+
   	curr_task = Task.find(params[:taskid])
   	curr_task.text = params[:text_data]
+    
+
+    accuracy = evaluate(curr_task.text, curr_task.tasktype, curr_task.taskstage)
+    response_text = ""
+    if curr_task.tasktype == 2
+      response_text = "Thanks for completing the summary task."
+    elsif curr_task.taskstage == 5 && curr_task.tasktype == 6
+      response_text = "Thanks for completing the summary task."
+    else
+      response_text = "Thanks for completing the transcription task. Accuracy: "+accuracy.to_s+"%."
+    end
+    flash[:success] = response_text
+    curr_task.accuracy = accuracy
+    if curr_task.bonus != nil && curr_task.condition[1] == 'p' && ((accuracy > 70) || curr_task.taskstage == 5)
+      newbonus = 0
+      if curr_task.taskstage == 1
+        newbonus = 0
+      elsif curr_task.taskstage == 2
+        newbonus = 50
+      elsif curr_task.taskstage == 3
+        newbonus = 100
+      elsif curr_task.taskstage == 4
+        newbonus = 150
+      elsif curr_task.taskstage == 5
+        newbonus = 200
+      end
+      curr_task.bonus = curr_task.bonus + newbonus
+    end
+
     curr_task.state = "finished"
   	curr_task.save
   	redirect_to :controller => 'task', :action => 'getnexttask'
@@ -86,6 +122,7 @@ class TaskController < ApplicationController
     elsif @curr_task.taskstage == 5
       @curr_task.timelimit = 10*60
     end
+
     @curr_task.save
     redirect_to :controller => 'task', :action => 'getnexttask'
   end 
@@ -103,5 +140,30 @@ class TaskController < ApplicationController
 
   def start
 
+  end
+  def index
+    @tasks = Task.all
+  end
+  def evaluate(text, task_type, task_stage)
+    correct_text = ''
+    if task_type == 1
+      correct_text = "Whether I do in fact know it depends on how things stand outside my mind. The various causal links between the world and my perceptions and so forth, as long as they're working fine then I can have knowledge, just as the dog can have knowledge. I don't have to be an expert philosopher or an expert in human perception for my perceptual faculties to operate correctly and give me knowledge. But the skeptic is still lurking in the wings. Lets suppose we accept all I've said, suppose we accept that the word knowledge, as it's used in ordinary language, fits with this sort of externalist account and can quite properly be used in the various loose ways I've described. That doesn't actually defeat the skeptic because the skeptic can say, 'Well, look. If what you say is right, if your beliefs are in fact true, then I'll accept that you know all these things in this ordinary language sense."
+    elsif task_type == 2
+      correct_text = nil
+    elsif task_type == 3
+      correct_text = "And there's another problem with Putnam's approach. Let's step back from the vat for a moment and return me to real life. Okay. I know what a hand is. There's a hand. I'm walking along in Oxford one day, on my way to a lecture, and I get kidnapped and invatted. Some mad scientist extracts my brain and puts it in a vat. I forget about all this of course, I'm given the illusion of coming to a lecture. I look at this and I say, here's a hand, but actually, it's just a hand image. And now it looks like Putnam's approach isn't going to work. Because I learnt the use of the word hand by referring to real hands. So when I say hand I mean a real hand. I don't mean a hand image. In which case, I can raise the skeptical worry. Maybe this isn't a real hand. Maybe I am a brain in a vat."
+    elsif task_type == 4
+      correct_text = "Well I think most philosophers would agree with Hume that suspension of all belief is just impossible for us. The way we're made, we just cannot help believing certain things. And it's probably a good thing that we're made that way. Because if we weren't, then we'd be in serious trouble. Notice also that this approach goes well with contemporary externalism. The thought is that we shouldn't aim for all our beliefs to be such that we can justify them internally. We shouldn't expect to be able to work out internally the justification for everything we believe. Perhaps we have to rely on our animal nature that leads us inevitably to believe certain things and to trust in general that our faculties are thankfully more or less reliable. Of course that doesn't mean we should become undiscriminating and there remain big questions about how to distinguish between things that remain justified and things that aren't but if we want to hold out against the skeptic we probably have to be prepared to accept standards that are less than absolute."
+    elsif task_type == 5
+      correct_text = "Now you might well think that's a little bit too quick. It's not really a satisfactory answer to the skeptic. And I think that worry's right. Here's how I might spell it out. When I look at this thing, I think there's an object there which is actually moving in space, and whose movement is systematically correlated with my perception, in such a way that my perceptions give a directly reliable indicator of where it is. I have an idea of the sort of causal interaction which is responsible for these perceptions, in terms of light shining on my hand, bouncing off, I see it with my eyes, and so forth. And that's a very different picture from the picture of some mad scientist manipulating electrodes or running some computer program which is bringing it about that my perceptions correlate as though there were an object there. So maybe I can make some sense of a God's eye point of view"
+    elsif task_type == 6
+      correct_text = "so newton was asked what do you make of gravity? well he said slightly different things at slightly different times. but the most famous response of that of his was to say: I'm not going to try to make up any information of how gravity works, why it does what it does all I'm going to say is that the observations are consistent with it working as I describe. so I've got these equations which explain how gravity works, ok, it's proportional to the masses of the two objects, inversely proportionate to the square of the distance between them if you postulate a force like that it explains the phenomenon. I'm not going to go further, I'm not going to try to explain why. Maybe it's god's action, maybe there's some sort of ethereal fluid that somehow brings it about. But if the behavior of things is explained by this theory that's good enough."
+    end  
+    accuracy = 0
+    if task_type != 2 && task_stage < 5
+      l = text.length > correct_text.length ? text.length : correct_text.length
+      accuracy = (((Diff::LCS.LCS(text, correct_text).length).to_f/l)*100).to_i
+    end
+    accuracy
   end
 end

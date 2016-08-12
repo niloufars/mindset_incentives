@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160811075450) do
+ActiveRecord::Schema.define(version: 20160812013436) do
 
   create_table "tasks", force: :cascade do |t|
     t.string   "workerID"
@@ -27,6 +27,8 @@ ActiveRecord::Schema.define(version: 20160811075450) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.integer  "stagelimit"
+    t.integer  "accuracy"
+    t.integer  "bonus"
   end
 
 end
