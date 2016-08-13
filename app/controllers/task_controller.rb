@@ -142,7 +142,50 @@ class TaskController < ApplicationController
 
   end
   def index
-    @tasks = Task.all.order(:id)
+    all_tasks = Task.all
+    @all_users = []
+    @all_conditions = []
+    all_tasks.each do |t|
+      if t.tasktype == 6 && t.condition.length > 1
+        @all_users << t.workerID
+        @all_conditions << t.condition
+      end
+    end
+    @gp = 0
+    gp_n = 0
+    @gn = 0
+    gn_n = 0
+    @cn = 0
+    cn_n = 0
+    @cp = 0
+    cp_n = 0
+
+    @all_users.each do |u|
+      all_tasks.where(workerID: u).each do |t|
+        if ( t.condition == 'gp' )
+          @gp += t.taskstage 
+          gp_n += 1
+        elsif ( t.condition == 'gn' )
+          @gn += t.taskstage 
+          gn_n += 1
+        elsif ( t.condition == 'cp' )
+          @cp += t.taskstage 
+          cp_n += 1
+        elsif ( t.condition == 'cn' )
+          @cn += t.taskstage 
+          cn_n += 1
+        end
+      end
+
+    end
+    
+    @gp = gp_n>0 ? @gp.to_f/gp_n : @gp
+    @gn = gn_n>0 ? @gn.to_f/gn_n : @gn
+    @cp = cp_n>0 ? @cp.to_f/cp_n : @cp
+    @cn = cn_n>0 ? @cn.to_f/cn_n : @cn
+
+    @tasks = all_tasks
+
   end
   def evaluate(text, task_type, task_stage)
     correct_text = ''
