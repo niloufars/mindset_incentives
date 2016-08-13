@@ -21,18 +21,44 @@ class TaskController < ApplicationController
     @curr_task = nil
 
     if my_tasks.length == 0 # if this is the first task
-      cond = nil
-      coin = rand(0..3)
-      if coin == 0 
-        cond = "cp"
-      elsif coin == 1
-        cond = "cn"
-      elsif coin == 2
-        cond = "gp"
-      elsif coin == 3
-        cond = "gn"
+      
+      gp = Mycounter.where(condition: "gp")[0].count
+      gn = Mycounter.where(condition: "gn")[0].count
+      cp = Mycounter.where(condition: "cp")[0].count
+      cn = Mycounter.where(condition: "cn")[0].count
+      min_count = 1000
+      min_cond = ""
+      if gp<min_count
+        min_count = gp
+        min_cond = "gp"
       end
-      @curr_task = Task.create(workerID: curr_worker_id, condition: cond, tasktype: 1, taskstage: 0, stagelimit: 2, state: "active", timelimit: (10*60), bonus: 0)
+      if gn<min_count
+        min_count = gn
+        min_cond = "gn"
+      end
+      if cp<min_count
+        min_count = cp
+        min_cond = "cp"
+      end
+      if cn<min_count
+        min_count = cn
+        min_cond = "cn"
+      end
+
+      m = Mycounter.where(condition: min_cond)[0]
+      m.count = m.count+1
+      m.save
+      #coin = rand(0..3)
+      #if coin == 0 
+      #  cond = "cp"
+      #elsif coin == 1
+      #  cond = "cn"
+      #elsif coin == 2
+      #  cond = "gp"
+      #elsif coin == 3
+      #  cond = "gn"
+      #end
+      @curr_task = Task.create(workerID: curr_worker_id, condition: min_cond, tasktype: 1, taskstage: 0, stagelimit: 2, state: "active", timelimit: (10*60), bonus: 0)
       redirect_to controller: 'task', action: 'dashboard', taskid: @curr_task.id
     elsif my_tasks.length == 6 && my_tasks[-1].state == "finished"# if the last task is complete
       redirect_to controller: 'task', action: 'finished', b: my_tasks[-1].bonus
