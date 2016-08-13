@@ -200,16 +200,16 @@ class TaskController < ApplicationController
           lev += t.taskstage
         end
         if ( t.condition == 'gp' )
-          @gp += t.accuracy
+          @gp += t.taskstage 
           @gp_n += 1
         elsif ( t.condition == 'gn' )
-          @gn += t.accuracy 
+          @gn += t.taskstage 
           @gn_n += 1
         elsif ( t.condition == 'cp' )
-          @cp += t.accuracy 
+          @cp += t.taskstage 
           @cp_n += 1
         elsif ( t.condition == 'cn' )
-          @cn += t.accuracy 
+          @cn += t.taskstage 
           @cn_n += 1
         end
       end
