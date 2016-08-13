@@ -168,7 +168,7 @@ class TaskController < ApplicationController
 
   end
   def index
-    all_tasks = Task.all
+    all_tasks = Task.all.order(:id)
     @all_users = []
     @all_conditions = []
     all_tasks.each do |t|
