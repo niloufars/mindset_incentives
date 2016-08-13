@@ -152,37 +152,37 @@ class TaskController < ApplicationController
       end
     end
     @gp = 0
-    gp_n = 0
+    @gp_n = 0
     @gn = 0
-    gn_n = 0
+    @gn_n = 0
     @cn = 0
-    cn_n = 0
+    @cn_n = 0
     @cp = 0
-    cp_n = 0
+    @cp_n = 0
 
     @all_users.each do |u|
       all_tasks.where(workerID: u).each do |t|
         if ( t.condition == 'gp' )
           @gp += t.taskstage 
-          gp_n += 1
+          @gp_n += 1
         elsif ( t.condition == 'gn' )
           @gn += t.taskstage 
-          gn_n += 1
+          @gn_n += 1
         elsif ( t.condition == 'cp' )
           @cp += t.taskstage 
-          cp_n += 1
+          @cp_n += 1
         elsif ( t.condition == 'cn' )
           @cn += t.taskstage 
-          cn_n += 1
+          @cn_n += 1
         end
       end
 
     end
     
-    @gp = gp_n>0 ? @gp.to_f/gp_n : @gp
-    @gn = gn_n>0 ? @gn.to_f/gn_n : @gn
-    @cp = cp_n>0 ? @cp.to_f/cp_n : @cp
-    @cn = cn_n>0 ? @cn.to_f/cn_n : @cn
+    @gp = @gp_n>0 ? @gp.to_f/@gp_n : @gp
+    @gn = @gn_n>0 ? @gn.to_f/@gn_n : @gn
+    @cp = @cp_n>0 ? @cp.to_f/@cp_n : @cp
+    @cn = @cn_n>0 ? @cn.to_f/@cn_n : @cn
 
     @tasks = all_tasks
 
