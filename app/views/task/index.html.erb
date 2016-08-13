@@ -4,3 +4,13 @@ gn: <%= @gn %> (N=<%= @gn_n/6 %>) <%= @gn_l.to_sentence %><br>
 cp: <%= @cp %> (N=<%= @cp_n/6 %>) <%= @cp_l.to_sentence %><br>
 cn: <%= @cn %> (N=<%= @cn_n/6 %>) <%= @cn_l.to_sentence %><br>
 <br><br>
+<% (0..@all_users.length-1).each do |i| %>
+	<%= @all_users[i] %>, <%= @all_conditions[i] %><br>
+	<ul>
+	<% @tasks.where(workerID: @all_users[i]).order(:id).each do |task| %>
+		<li>
+		task: <%= task.tasktype %> | stage: <%= task.taskstage %> | <%= task.accuracy %>% | $<%= task.bonus %>
+		</li>
+	<% end %>
+	</ul>
+<% end %>
