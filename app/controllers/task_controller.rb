@@ -172,7 +172,7 @@ class TaskController < ApplicationController
     @all_users = []
     @all_conditions = []
     all_tasks.each do |t|
-      if t.tasktype == 6 && t.condition.length > 1
+      if t.tasktype == 6 && t.condition.length > 1 && t.state == "finished"
         @all_users << t.workerID
         @all_conditions << t.condition
       end
