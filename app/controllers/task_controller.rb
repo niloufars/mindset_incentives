@@ -212,13 +212,13 @@ class TaskController < ApplicationController
         end
       end
       if cond == 'gp'
-        @gp_l << (lev.to_f)/6
+        @gp_l << ((lev.to_f)/6).round(2)
       elsif cond == 'gn'
-        @gn_l << (lev.to_f)/6
+        @gn_l << ((lev.to_f)/6).round(2)
       elsif cond == 'cp'
-        @cp_l << (lev.to_f)/6
+        @cp_l << ((lev.to_f)/6).round(2)
       elsif cond == 'cn'
-        @cn_l << (lev.to_f)/6
+        @cn_l << ((lev.to_f)/6).round(2)
       end
     end
     
