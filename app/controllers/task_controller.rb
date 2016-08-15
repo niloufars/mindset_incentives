@@ -196,7 +196,7 @@ class TaskController < ApplicationController
       cond = ""
       all_tasks.where(workerID: u).each do |t|
         cond = t.condition
-        if t.tasktype==4
+        if t.tasktype==5
           lev += t.taskstage
         end
         if ( t.condition == 'gp' ) 
