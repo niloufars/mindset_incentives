@@ -199,16 +199,16 @@ class TaskController < ApplicationController
         if t.tasktype>2
           lev += t.taskstage
         end
-        if ( t.condition == 'gp' )
+        if ( t.condition == 'gp' ) && t.tasktype==3
           @gp += t.taskstage 
           @gp_n += 1
-        elsif ( t.condition == 'gn' )
+        elsif ( t.condition == 'gn' ) && t.tasktype==3
           @gn += t.taskstage 
           @gn_n += 1
-        elsif ( t.condition == 'cp' )
+        elsif ( t.condition == 'cp' ) && t.tasktype==3
           @cp += t.taskstage 
           @cp_n += 1
-        elsif ( t.condition == 'cn' )
+        elsif ( t.condition == 'cn' ) && t.tasktype==3
           @cn += t.taskstage 
           @cn_n += 1
         end
