@@ -117,13 +117,13 @@ class TaskController < ApplicationController
       if curr_task.taskstage == 1
         newbonus = 0
       elsif curr_task.taskstage == 2
-        newbonus = 50
+        newbonus = 25
       elsif curr_task.taskstage == 3
-        newbonus = 100
+        newbonus = 50
       elsif curr_task.taskstage == 4
-        newbonus = 150
+        newbonus = 75
       elsif curr_task.taskstage == 5
-        newbonus = 200
+        newbonus = 100
       end
       curr_task.bonus = curr_task.bonus + newbonus
     end
