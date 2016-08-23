@@ -195,20 +195,23 @@ class TaskController < ApplicationController
       cond = ""
       all_tasks.where(workerID: u).each do |t|
         cond = t.condition
-        if t.tasktype==6
-          lev += t.taskstage
-        end
+        lev += t.taskstage
+        
         if ( t.condition == 'gp' && t.accuracy!=0 ) 
-          @gp += t.accuracy
+          #@gp += t.accuracy
+          @gp += taskstage
           @gp_n += 1
         elsif ( t.condition == 'gn' && t.accuracy!=0 ) 
-          @gn += t.accuracy 
+          #@gn += t.accuracy 
+          @gn += taskstage
           @gn_n += 1
         elsif ( t.condition == 'cp' && t.accuracy!=0) 
-          @cp += t.accuracy 
+          #@cp += t.accuracy 
+          @cp += taskstage
           @cp_n += 1
         elsif ( t.condition == 'cn' && t.accuracy!=0) 
-          @cn += t.accuracy 
+          #@cn += t.accuracy 
+          @cn += taskstage
           @cn_n += 1
         end
       end
