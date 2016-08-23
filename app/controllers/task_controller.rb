@@ -197,7 +197,7 @@ class TaskController < ApplicationController
         cond = t.condition
         if (t.accuracy != 0 )
           lev += t.taskstage
-        
+        end      
         if ( t.condition == 'gp' && t.accuracy!=0 ) 
           #@gp += t.accuracy
           @gp += t.taskstage
