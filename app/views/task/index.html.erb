@@ -10,6 +10,9 @@ cn: <%= @cn %> (N=<%= @cn_n/6 %>) <%= @cn_l.to_sentence %><br>
 	<% @tasks.where(workerID: @all_users[i]).order(:id).each do |task| %>
 		<li>
 		task: <%= task.tasktype %> | stage: <%= task.taskstage %> | <%= task.accuracy %>% | $<%= task.bonus %>
+		<% if task.tasktype == 2 %>
+			<br><%= task.text %>
+		<% end %>
 		</li>
 	<% end %>
 	</ul>
