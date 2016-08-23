@@ -195,7 +195,8 @@ class TaskController < ApplicationController
       cond = ""
       all_tasks.where(workerID: u).each do |t|
         cond = t.condition
-        lev += t.taskstage
+        if (t.accuracy != 0 )
+          lev += t.taskstage
         
         if ( t.condition == 'gp' && t.accuracy!=0 ) 
           #@gp += t.accuracy
