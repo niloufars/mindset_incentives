@@ -3,15 +3,13 @@
 -- bonus: $<%= @curr_task.bonus.to_f/100 %>
 <% end %></p>
 <h2> Choose your level of difficulty for task <%= @curr_task.tasktype.to_s %>/6:</h2>
-
-<p>You can choose to stay at the basic level of difficulty or take on more challenging tasks. </p>
 <p>
 	Transcribe a <span style="font-weight: bold;">one minute</span> audio file within the time allotted. <br>
+    Choose your level of difficulty. You can choose to stay at the basic level of difficulty or take on a more challenging task: <br>
     <% if @curr_task.condition[1] == 'p' %>
     If you get more that <span style="font-weight: bold;">70% of the audio</span> transcribed correctly you will receive the bonus. 
     <% end %>
 </p>
-<p>After you complete a task the next difficulty level will unlock.</p>
 
 <%= form_tag("/submitchoice", method: "post") do %>
 
@@ -36,42 +34,42 @@
             <div class="numberCircle">B</div>
             <span class="glyphicon glyphicon-time" aria-hidden="true"></span> limit: 7 minutes<br>
             <% if @curr_task.condition[1] == 'p' %>
-            bonus: 50c
+            bonus: 25c
             <% end %>
 
             </div>
         </td>        
     
         <td>                          
-            <input name="level" id="stage_3" type="radio" value="3"  disabled>  
+            <input name="level" id="stage_3" type="radio" value="3"  required>  
             <div class="option ">
             <div class="numberCircle">C</div>
 
             <span class="glyphicon glyphicon-time" aria-hidden="true"></span> limit: 5 minutes<br>
             <% if @curr_task.condition[1] == 'p' %>
-            bonus: $1
+            bonus: 50c
             <% end %>
             </div>                  
         </td>
 
         <td>                          
-            <input name="level" id="stage_4" type="radio" value="4"  disabled>  
+            <input name="level" id="stage_4" type="radio" value="4"  required>  
             <div class="option ">
             <div class="numberCircle">D</div>
-            <span class="glyphicon glyphicon-time" aria-hidden="true"></span> limit: 3 minutes<br>
+            <span class="glyphicon glyphicon-time" aria-hidden="true"></span> limit: 4 minutes<br>
             <% if @curr_task.condition[1] == 'p' %>
-            bonus: $1.5
+            bonus: 75c
             <% end %>
             </div>                  
         </td>
 
         <td>                          
-            <input name="level" id="stage_5" type="radio" value="5"  disabled>  
+            <input name="level" id="stage_5" type="radio" value="5"  required>  
             <div class="option ">
             <div class="numberCircle">E</div>
-            summarize audio<br>
+            <span class="glyphicon glyphicon-time" aria-hidden="true"></span> limit: 3 minutes<br>
             <% if @curr_task.condition[1] == 'p' %>
-                bonus: $2
+            bonus: $1
             <% end %>
             </div>                  
         </td>
@@ -95,10 +93,7 @@
 
 <script>
 $( document ).ready(function(){
-    for (i=1 ; i<='<%= @curr_task.stagelimit %>' ; i++ ){
-        $("#stage_"+i).prop('disabled', false);
-        $("#stage_"+i).prop('required', true);
-    }
+    
     
 });
 $('#tableSelect td').click(function() {

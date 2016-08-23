@@ -13,7 +13,8 @@ class TaskController < ApplicationController
   end
   def finished
     @bonus = params[:b].to_i
-    @complete_code = (0...8).map { (65 + rand(26)).chr }.join
+    c = params[:c]
+    @complete_code = (0...8).map { (97 + rand(26)).chr }.join+c
   end
   def getnexttask
     # move stuff in dashboard here, redirect to dashboard if task stage = 0
@@ -61,7 +62,7 @@ class TaskController < ApplicationController
       @curr_task = Task.create(workerID: curr_worker_id, condition: min_cond, tasktype: 1, taskstage: 0, stagelimit: 2, state: "active", timelimit: (10*60), bonus: 0)
       redirect_to controller: 'task', action: 'dashboard', taskid: @curr_task.id
     elsif my_tasks.length == 6 && my_tasks[-1].state == "finished"# if the last task is complete
-      redirect_to controller: 'task', action: 'finished', b: my_tasks[-1].bonus
+      redirect_to controller: 'task', action: 'finished', b: my_tasks[-1].bonus, c:my_tasks[-1].condition[1]
     else
       latest_task = my_tasks[-1]
       if latest_task.state == "active"
@@ -106,14 +107,12 @@ class TaskController < ApplicationController
     response_text = ""
     if curr_task.tasktype == 2
       response_text = "Thanks for completing the summary task."
-    elsif curr_task.taskstage == 5 && curr_task.tasktype == 6
-      response_text = "Thanks for completing the summary task."
     else
       response_text = "Thanks for completing the transcription task. Accuracy: "+accuracy.to_s+"%."
     end
     flash[:success] = response_text
     curr_task.accuracy = accuracy
-    if curr_task.bonus != nil && curr_task.condition[1] == 'p' && ((accuracy > 70) || curr_task.taskstage == 5)
+    if curr_task.bonus != nil && curr_task.condition[1] == 'p' && (accuracy > 70)
       newbonus = 0
       if curr_task.taskstage == 1
         newbonus = 0
@@ -144,9 +143,9 @@ class TaskController < ApplicationController
     elsif @curr_task.taskstage == 3
       @curr_task.timelimit = 5*60
     elsif @curr_task.taskstage == 4
-      @curr_task.timelimit = 3*60
+      @curr_task.timelimit = 4*60
     elsif @curr_task.taskstage == 5
-      @curr_task.timelimit = 10*60
+      @curr_task.timelimit = 3*60
     end
 
     @curr_task.save
@@ -248,7 +247,7 @@ class TaskController < ApplicationController
       correct_text = "so newton was asked what do you make of gravity? well he said slightly different things at slightly different times. but the most famous response of that of his was to say: I'm not going to try to make up any information of how gravity works, why it does what it does all I'm going to say is that the observations are consistent with it working as I describe. so I've got these equations which explain how gravity works, ok, it's proportional to the masses of the two objects, inversely proportionate to the square of the distance between them if you postulate a force like that it explains the phenomenon. I'm not going to go further, I'm not going to try to explain why. Maybe it's god's action, maybe there's some sort of ethereal fluid that somehow brings it about. But if the behavior of things is explained by this theory that's good enough."
     end  
     accuracy = 0
-    if task_type != 2 && task_stage < 5
+    if task_type != 2 
       l = text.length > correct_text.length ? text.length : correct_text.length
       accuracy = (((Diff::LCS.LCS(text, correct_text).length).to_f/l)*100).to_i
     end

@@ -8,22 +8,17 @@
 </div>
 <% if @curr_task.tasktype == 2 %>
 	<p>Write a one paragraph summary of the audio clip <b>in your own words</b>. What is the main message?</p>
-<% elsif @curr_task.taskstage == 5 %>
-	<p>Write a one paragraph summary of the audio clip <b>in your own words</b>. What is the main message?</p>
 <% else %>
 	<p>Transcribe the following audio clip in the text box, <b>pay close attention to your time limit above</b>
  	<% if @curr_task.condition[1] == 'p' %>
-	<br> you need to get at least 70% of the transcription right to receive the bonus.
+	<br> you need to get at least 70% of the transcription right to receive the bonus and at least 50% for the task to be accepted.
 	<% end %>
-	<br>You need to get at least 50% of the transcription right for the task to be accepted.
 	</p>
 <% end %>
 
 <audio controls>
 	<% if @curr_task.tasktype == 2 %>
 		<source src= <%= "https://stanford.edu/~niloufar/audio/p1"+@curr_task.condition[0]+@curr_task.tasktype.to_s+".mp3" %> type="audio/mpeg">
-	<% elsif  @curr_task.taskstage == 5 %>
-	<source src= <%= "https://stanford.edu/~niloufar/audio/p1t"+@curr_task.tasktype.to_s+"_summary.mp3" %> type="audio/mpeg">
 	<% else %>
 		<source src= <%= "https://stanford.edu/~niloufar/audio/p1t"+@curr_task.tasktype.to_s+".mp3" %> type="audio/mpeg">		
 	<% end %>
@@ -50,7 +45,7 @@
 			t = 0;
 			$( document ).ready(function(){
 				//auto_save_text();
-				if ( '<%= @curr_task.tasktype %>' == 2 || '<%= @curr_task.taskstage %>' == 5){
+				if ( '<%= @curr_task.tasktype %>' == 2 ){
 					$("#text_data").val("summary:");
 				//	set_text('<%= @curr_task.condition %>');
 				}
