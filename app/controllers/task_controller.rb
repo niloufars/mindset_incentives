@@ -167,7 +167,7 @@ class TaskController < ApplicationController
 
   end
   def index
-    all_tasks = Task.where(created_at:Time.strptime("8-10-2016", "%m-%d-%Y") ..Time.strptime("8-22-2016", "%m-%d-%Y")).order(:id)
+    all_tasks = Task.where(Time.strptime("8-22-2016", "%m-%d-%Y")..Time.now).order(:id)
     @all_users = []
     @all_conditions = []
     all_tasks.each do |t|
@@ -198,19 +198,19 @@ class TaskController < ApplicationController
         if (t.tasktype > 2 && t.accuracy != 0 )
           lev += t.taskstage
         end      
-        if ( t.condition == 'gp' && t.accuracy!=0 && t.taskstage == 4 ) 
+        if ( t.condition == 'gp' && t.accuracy!=0  ) 
           @gp += t.accuracy
           #@gp += t.taskstage
           @gp_n += 1
-        elsif ( t.condition == 'gn' && t.accuracy!=0 && t.taskstage == 4) 
+        elsif ( t.condition == 'gn' && t.accuracy!=0) 
           @gn += t.accuracy 
           #@gn += t.taskstage
           @gn_n += 1
-        elsif ( t.condition == 'cp' && t.accuracy!=0 && t.taskstage == 4) 
+        elsif ( t.condition == 'cp' && t.accuracy!=0) 
           @cp += t.accuracy 
           #@cp += t.taskstage
           @cp_n += 1
-        elsif ( t.condition == 'cn' && t.accuracy!=0 && t.taskstage == 4) 
+        elsif ( t.condition == 'cn' && t.accuracy!=0 ) 
           @cn += t.accuracy 
           #@cn += t.taskstage
           @cn_n += 1
