@@ -198,19 +198,19 @@ class TaskController < ApplicationController
         if (t.tasktype > 2 && t.accuracy != 0 )
           lev += t.taskstage
         end      
-        if ( t.condition == 'gp' && t.accuracy!=0 && taskstage == 1 ) 
+        if ( t.condition == 'gp' && t.accuracy!=0 && t.taskstage == 1 ) 
           @gp += t.accuracy
           #@gp += t.taskstage
           @gp_n += 1
-        elsif ( t.condition == 'gn' && t.accuracy!=0 && taskstage == 1) 
+        elsif ( t.condition == 'gn' && t.accuracy!=0 && t.taskstage == 1) 
           @gn += t.accuracy 
           #@gn += t.taskstage
           @gn_n += 1
-        elsif ( t.condition == 'cp' && t.accuracy!=0 && taskstage == 1) 
+        elsif ( t.condition == 'cp' && t.accuracy!=0 && t.taskstage == 1) 
           @cp += t.accuracy 
           #@cp += t.taskstage
           @cp_n += 1
-        elsif ( t.condition == 'cn' && t.accuracy!=0 && taskstage == 1) 
+        elsif ( t.condition == 'cn' && t.accuracy!=0 && t.taskstage == 1) 
           @cn += t.accuracy 
           #@cn += t.taskstage
           @cn_n += 1
