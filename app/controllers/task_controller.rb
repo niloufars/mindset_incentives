@@ -227,10 +227,10 @@ class TaskController < ApplicationController
       end
     end
     
-    @gp = @gp_n>0 ? @gp.to_f/@gp_n : @gp
-    @gn = @gn_n>0 ? @gn.to_f/@gn_n : @gn
-    @cp = @cp_n>0 ? @cp.to_f/@cp_n : @cp
-    @cn = @cn_n>0 ? @cn.to_f/@cn_n : @cn
+    @gp = @gp_n>0 ? (@gp.to_f/@gp_n).round(2) : @gp
+    @gn = @gn_n>0 ? (@gn.to_f/@gn_n).round(2) : @gn
+    @cp = @cp_n>0 ? (@cp.to_f/@cp_n).round(2) : @cp
+    @cn = @cn_n>0 ? (@cn.to_f/@cn_n).round(2) : @cn
 
     @tasks = all_tasks
 
