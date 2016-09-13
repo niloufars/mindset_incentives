@@ -188,7 +188,7 @@ class TaskController < ApplicationController
     end
   end
   def index
-    all_tasks = Task.where(created_at: Time.strptime("8-22-2016", "%m-%d-%Y")..Time.now).order(:id)
+    all_tasks = Task.where(created_at: Time.strptime("8-29-2016", "%m-%d-%Y")..Time.now).order(:id)
     @all_users = []
     @all_conditions = []
     all_tasks.each do |t|
