@@ -26,7 +26,7 @@ class TaskController < ApplicationController
       gp = Mycounter.where(condition: "gp")[0].count
       gn = Mycounter.where(condition: "gn")[0].count
       cp = Mycounter.where(condition: "cp")[0].count
-      cn = Mycounter.where(condition: "cn")[0].count
+      #cn = Mycounter.where(condition: "cn")[0].count
       min_count = 1000
       min_cond = ""
       if gp<min_count
@@ -41,10 +41,10 @@ class TaskController < ApplicationController
         min_count = cp
         min_cond = "cp"
       end
-      if cn<min_count
-        min_count = cn
-        min_cond = "cn"
-      end
+      #if cn<min_count
+      #  min_count = cn
+      #  min_cond = "cn"
+      #end
 
       m = Mycounter.where(condition: min_cond)[0]
       m.count = m.count+1
