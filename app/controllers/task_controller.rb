@@ -181,7 +181,7 @@ class TaskController < ApplicationController
           @all_rows[-1] += ", " + t.taskstage.to_s
         end
 
-        if ( t.tasktype >= 3 && t.tasktype<6 && t.tasktype != nil && t.taskstage != nil)
+        if ( t.tasktype == 6 && t.tasktype != nil && t.taskstage != nil)
           @all_rows << t.id.to_s + ", " + t.workerID.to_s + ", " + t.tasktype.to_s + ", " + t.taskstage.to_s + ", " + (t.condition.to_s[0] == 'g'? "1" : "0") + ", " + (t.condition.to_s[1] == 'p'? "1" : "0") + ", " + t.accuracy.to_s
         end
       end
