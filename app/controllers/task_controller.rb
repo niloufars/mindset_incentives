@@ -187,6 +187,17 @@ class TaskController < ApplicationController
       end
     end
   end
+  def data_task_6
+    all_tasks = Task.where(created_at: Time.strptime("8-22-2016", "%m-%d-%Y")..Time.now).order(:id)
+    @all_users = []
+    @all_rows = []
+    all_tasks.each do |t|
+      if t.tasktype == 6 && t.condition.length > 1 && t.state == "finished"
+        @all_rows << t.id.to_s + ", " + t.workerID.to_s + ", " + t.taskstage.to_s + ", " + (t.condition.to_s[0] == 'g'? "1" : "0") + ", " + (t.condition.to_s[1] == 'p'? "1" : "0") + ", " + t.accuracy.to_s
+      end
+    end
+    
+  end
   def index
     all_tasks = Task.where(created_at: Time.strptime("8-22-2016", "%m-%d-%Y")..Time.now).order(:id)
     @all_users = []
